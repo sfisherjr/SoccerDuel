@@ -13,16 +13,18 @@ namespace SoccerDuel
         private Texture2D texture;
         private float groundFlatY;
         private float velocity = 500f;
-        private float dropSpeed = 300f;
+        private float jumpVelocity = 400f;
 
         private KeyboardState keyState;
         private KeyboardState oldKeyState;
         private bool isJumping = false;
         private bool moveDown = false;
+        private int playerNo = 1;
 
-        public Player(float groundFlatY)
+        public Player(float groundFlatY, int player)
         {
             this.groundFlatY = groundFlatY;
+            this.playerNo = player;
         }
 
         public void LoadContent(ContentManager content)
@@ -38,21 +40,47 @@ namespace SoccerDuel
 
             if (position.X > 0)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.A))
-                    position.X -= deltaTime * velocity;   
+                if (playerNo == 1)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.A))
+                        position.X -= deltaTime * velocity; 
+                }
+                else
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                        position.X -= deltaTime * velocity; 
+                }
             }
             
             if (position.X < Game1.SCREEN_WIDTH - texture.Width)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.D))
-                    position.X += deltaTime * velocity;
+                if (playerNo == 1)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.D))
+                        position.X += deltaTime * velocity;
+                }
+                else
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                        position.X += deltaTime * velocity;
+                }
             }
 
             if (!isJumping && !moveDown)
             {
-                if (keyState.IsKeyDown(Keys.W) && !oldKeyState.IsKeyDown(Keys.W))
+                if (playerNo == 1)
                 {
-                    isJumping = true;
+                    if (keyState.IsKeyDown(Keys.W) && !oldKeyState.IsKeyDown(Keys.W))
+                    {
+                        isJumping = true;
+                    }
+                }
+                else
+                {
+                    if (keyState.IsKeyDown(Keys.Up) && !oldKeyState.IsKeyDown(Keys.Up))
+                    {
+                        isJumping = true;
+                    }
                 }
             }
 
@@ -65,7 +93,7 @@ namespace SoccerDuel
                 }
                 else
                 {
-                    position.Y -= deltaTime * 600f;
+                    position.Y -= deltaTime * jumpVelocity;
                 }
             }
 
@@ -73,30 +101,33 @@ namespace SoccerDuel
             {
                 if (groundFlatY - (position.Y + texture.Height) > 0)
                 {
-                    position.Y += deltaTime * 600f;
+                    position.Y += deltaTime * jumpVelocity;
                 }
                 else
                 {
                     moveDown = false;
+                    position.Y = groundFlatY - texture.Height;
                 }
             }
-
-            Debug.WriteLine("Position Y: " + (groundFlatY - position.Y));
 
             oldKeyState = keyState;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-                texture,
-                position,
-                Color.White);
+            if (playerNo == 1)
+            {
+                spriteBatch.Draw(texture, position, Color.Red);
+            }
+            else
+            {
+                spriteBatch.Draw(texture, position, Color.Blue);
+            }
         }
 
-        public void MoveToStartPosition(int player)
+        public void MoveToStartPosition()
         {
-            if (player == 1)
+            if (playerNo == 1)
             {
                 position = new Vector2(
                     Game1.SCREEN_WIDTH / 2 - texture.Width * 2,

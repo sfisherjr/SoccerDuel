@@ -11,6 +11,7 @@ namespace SoccerDuel
     public class Teams
     {
         private Player aPlayer;
+        private Player bPlayer;
         private float groundFlatY;
 
         public Teams(float groundFlatY)
@@ -20,20 +21,26 @@ namespace SoccerDuel
 
         public void LoadContent(ContentManager content)
         {
-            aPlayer = new Player(groundFlatY);
+            aPlayer = new Player(groundFlatY, 1);
             aPlayer.LoadContent(content);
 
-            aPlayer.MoveToStartPosition(1);
+            bPlayer = new Player(groundFlatY, 2);
+            bPlayer.LoadContent(content);
+
+            aPlayer.MoveToStartPosition();
+            bPlayer.MoveToStartPosition();
         }
 
         public void Update(GameTime gameTime)
         {
             aPlayer.Update(gameTime);
+            bPlayer.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             aPlayer.Draw(spriteBatch);
+            bPlayer.Draw(spriteBatch);
         }        
     }
 }

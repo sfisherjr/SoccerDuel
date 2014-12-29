@@ -31,6 +31,9 @@ namespace SoccerDuel
 
         protected override void Initialize()
         {
+            this.IsFixedTimeStep = true;
+            this.IsMouseVisible = true;
+
             var screen = System.Windows.Forms.Screen.AllScreens.First(e => e.Primary);
             Window.IsBorderless = true;
             Window.Position = new Point(screen.Bounds.X, screen.Bounds.Y);
@@ -42,8 +45,6 @@ namespace SoccerDuel
             graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
 
             Debug.WriteLine("Screen Resolution->W:" + SCREEN_WIDTH + " " + "H:" + SCREEN_HEIGHT);
-
-            this.IsMouseVisible = true;
             graphics.ApplyChanges();
 
             base.Initialize();
