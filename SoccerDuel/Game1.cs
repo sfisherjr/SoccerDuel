@@ -19,6 +19,7 @@ namespace SoccerDuel
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private Ground ground;
+        private SoccerNets teamNets;
 
         public Game1()
             : base()
@@ -51,6 +52,8 @@ namespace SoccerDuel
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ground = new Ground(GraphicsDevice);
+            teamNets = new SoccerNets(ground.bounds.Y);
+            teamNets.LoadContent(Content);
         }
 
         protected override void UnloadContent()
@@ -72,6 +75,7 @@ namespace SoccerDuel
 
             spriteBatch.Begin();
             ground.Draw(spriteBatch);
+            teamNets.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
