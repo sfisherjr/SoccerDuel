@@ -21,6 +21,7 @@ namespace SoccerDuel
         private Ground ground;
         private SoccerNets teamNets;
         private Teams teams;
+        private Ball ball;
 
         public Game1()
             : base()
@@ -58,6 +59,8 @@ namespace SoccerDuel
             teamNets.LoadContent(Content);
             teams = new Teams(ground.bounds.Y);
             teams.LoadContent(Content);
+            ball = new Ball(ground.bounds.Y);
+            ball.LoadContent(Content);
         }
 
         protected override void UnloadContent()
@@ -71,6 +74,7 @@ namespace SoccerDuel
                 this.Exit();
 
             teams.Update(gameTime);
+            ball.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -82,6 +86,7 @@ namespace SoccerDuel
             spriteBatch.Begin();
             ground.Draw(spriteBatch);
             teams.Draw(spriteBatch);
+            ball.Draw(spriteBatch);
             teamNets.Draw(spriteBatch);
             spriteBatch.End();
 
