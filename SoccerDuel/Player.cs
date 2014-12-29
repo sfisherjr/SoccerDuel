@@ -14,6 +14,7 @@ namespace SoccerDuel
         private float groundFlatY;
         private float velocity = 500f;
         private float jumpVelocity = 400f;
+        private float startSpacer = 200f;
 
         private KeyboardState keyState;
         private KeyboardState oldKeyState;
@@ -130,13 +131,13 @@ namespace SoccerDuel
             if (playerNo == 1)
             {
                 position = new Vector2(
-                    Game1.SCREEN_WIDTH / 2 - texture.Width * 2,
+                    (Game1.SCREEN_WIDTH / 2 - texture.Width / 2) - startSpacer,
                     groundFlatY - texture.Height);
             }
             else
             {
                 position = new Vector2(
-                    Game1.SCREEN_WIDTH / 2 + texture.Width * 2,
+                    (Game1.SCREEN_WIDTH / 2 - texture.Width / 2) + startSpacer,
                     groundFlatY - texture.Height);
             }
         }
