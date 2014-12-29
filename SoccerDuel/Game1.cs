@@ -20,6 +20,7 @@ namespace SoccerDuel
         private SpriteBatch spriteBatch;
         private Ground ground;
         private SoccerNets teamNets;
+        private Teams teams;
 
         public Game1()
             : base()
@@ -54,6 +55,8 @@ namespace SoccerDuel
             ground = new Ground(GraphicsDevice);
             teamNets = new SoccerNets(ground.bounds.Y);
             teamNets.LoadContent(Content);
+            teams = new Teams(ground.bounds.Y);
+            teams.LoadContent(Content);
         }
 
         protected override void UnloadContent()
@@ -66,6 +69,8 @@ namespace SoccerDuel
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
+            teams.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -75,6 +80,7 @@ namespace SoccerDuel
 
             spriteBatch.Begin();
             ground.Draw(spriteBatch);
+            teams.Draw(spriteBatch);
             teamNets.Draw(spriteBatch);
             spriteBatch.End();
 
