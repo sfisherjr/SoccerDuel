@@ -10,16 +10,18 @@ namespace SoccerDuel
     {
         public Vector2 position;
 
+        private const float MAX_JUMP_HEIGHT = 15f;
+        private const float VELOCITY = 500f;
+
         private Texture2D texture;
-        private float groundFlatY;
-        private float velocity = 500f;
-        private float jumpVelocity = 400f;
-        private float startSpacer = 200f;
+        private float groundFlatY; // Ground surface position
+        private float jumpVelocity = 0;
+        private float startSpacer = 200f; // Offset where player starts when round begins
 
         private KeyboardState keyState;
         private KeyboardState oldKeyState;
         private bool isJumping = false;
-        private bool moveDown = false;
+        private bool isWalking = false;
         private int playerNo = 1;
 
         public Player(float groundFlatY, int player)
@@ -44,36 +46,50 @@ namespace SoccerDuel
                 if (playerNo == 1)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.A))
-                        position.X -= deltaTime * velocity; 
+                        position.X -= deltaTime * VELOCITY;
                 }
                 else
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                        position.X -= deltaTime * velocity; 
+                        position.X -= deltaTime * VELOCITY;
                 }
             }
-            
+
             if (position.X < Game1.SCREEN_WIDTH - texture.Width)
             {
                 if (playerNo == 1)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.D))
-                        position.X += deltaTime * velocity;
+                        position.X += deltaTime * VELOCITY;
                 }
                 else
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                        position.X += deltaTime * velocity;
+                        position.X += deltaTime * VELOCITY;
                 }
             }
 
-            if (!isJumping && !moveDown)
+            if (isJumping)
+            {
+                position.Y -= jumpVelocity;
+                jumpVelocity -= 1;
+
+                if (position.Y >= groundFlatY - texture.Height)
+                {
+                    position.Y = groundFlatY - texture.Height;
+                    isJumping = false;
+                    Debug.WriteLine("Resetting position to groundFlatY: " + groundFlatY.ToString());
+                }
+            }
+
+            if (!isJumping)
             {
                 if (playerNo == 1)
                 {
                     if (keyState.IsKeyDown(Keys.W) && !oldKeyState.IsKeyDown(Keys.W))
                     {
                         isJumping = true;
+                        jumpVelocity = MAX_JUMP_HEIGHT;
                     }
                 }
                 else
@@ -81,33 +97,8 @@ namespace SoccerDuel
                     if (keyState.IsKeyDown(Keys.Up) && !oldKeyState.IsKeyDown(Keys.Up))
                     {
                         isJumping = true;
+                        jumpVelocity = MAX_JUMP_HEIGHT;
                     }
-                }
-            }
-
-            if (isJumping)
-            {
-                if ((groundFlatY - (position.Y - (float)texture.Height)) > 230)
-                {
-                    moveDown = true;
-                    isJumping = false;
-                }
-                else
-                {
-                    position.Y -= deltaTime * jumpVelocity;
-                }
-            }
-
-            if (moveDown)
-            {
-                if (groundFlatY - (position.Y + texture.Height) > 0)
-                {
-                    position.Y += deltaTime * jumpVelocity;
-                }
-                else
-                {
-                    moveDown = false;
-                    position.Y = groundFlatY - texture.Height;
                 }
             }
 
@@ -117,13 +108,9 @@ namespace SoccerDuel
         public void Draw(SpriteBatch spriteBatch)
         {
             if (playerNo == 1)
-            {
                 spriteBatch.Draw(texture, position, Color.Red);
-            }
             else
-            {
                 spriteBatch.Draw(texture, position, Color.Blue);
-            }
         }
 
         public void MoveToStartPosition()
