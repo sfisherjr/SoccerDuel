@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
-using Microsoft.Xna.Framework.GamerServices;
 using System.Diagnostics;
 
 namespace SoccerDuel
@@ -32,7 +31,6 @@ namespace SoccerDuel
 
         protected override void Initialize()
         {
-            this.IsFixedTimeStep = true;
             this.IsMouseVisible = true;
 
             var screen = System.Windows.Forms.Screen.AllScreens.First(e => e.Primary);
