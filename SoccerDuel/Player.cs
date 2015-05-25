@@ -21,7 +21,6 @@ namespace SoccerDuel
         private KeyboardState keyState;
         private KeyboardState oldKeyState;
         private bool isJumping = false;
-        private bool isWalking = false;
         private int playerNo = 1;
 
         public Player(float groundFlatY, int player)
